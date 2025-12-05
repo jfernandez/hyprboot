@@ -22,6 +22,7 @@ modules:
       files:
         - https://download.docker.com/linux/fedora/docker-ce.repo
         - https://downloads.1password.com/linux/rpm/stable/x86_64/1password.repo
+        - https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome.repo
       copr:
         - atim/starship
     install:
@@ -48,6 +49,7 @@ modules:
         # apps
         - 1password
         - 1password-cli
+        - google-chrome-stable
     remove:
       packages:
         # example: removing firefox (in favor of the flatpak)
