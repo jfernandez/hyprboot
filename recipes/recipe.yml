@@ -49,6 +49,8 @@ modules:
         # apps
         - google-chrome-stable
         # development
+        - nodejs
+        - npm
         - gcc
         - gcc-c++
         - make
