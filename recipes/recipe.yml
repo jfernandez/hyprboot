@@ -85,6 +85,7 @@ modules:
     scripts:
       - install-neovim-nightly.sh
       - enable-brew-services.sh
+      - enable-hyprblue-groups.sh
 
   - type: default-flatpaks
     configurations:

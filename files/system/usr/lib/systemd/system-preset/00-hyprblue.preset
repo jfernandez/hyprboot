@@ -1,3 +1,6 @@
 # Hyprblue system presets
 # Disable waiting for network at boot - not needed for desktop use
 disable NetworkManager-wait-online.service
+
+# Enable Docker socket activation
+enable docker.socket
