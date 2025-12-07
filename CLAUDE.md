@@ -48,4 +48,6 @@ Available module types: `files`, `dnf`, `rpm-ostree`, `default-flatpaks`, `scrip
 
 ## Commit Guidelines
 
+**Always use the `git-workflow` skill when creating commits or pull requests.**
+
 Use conventional commits. Keep messages brief. No Claude Code attribution.
