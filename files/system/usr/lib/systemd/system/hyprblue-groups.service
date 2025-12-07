@@ -1,13 +1,12 @@
 [Unit]
 Description=Add wheel members to docker and libvirt groups
-Before=docker.socket
+DefaultDependencies=no
+After=local-fs.target
+Before=sockets.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/hyprblue-groups
-Restart=on-failure
-RestartSec=30
-StartLimitInterval=0
 
 [Install]
-WantedBy=default.target
+WantedBy=sysinit.target
