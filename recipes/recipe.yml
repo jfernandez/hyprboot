@@ -89,6 +89,7 @@ modules:
   - type: script
     scripts:
       - install-neovim-nightly.sh
+      - install-mdserve.sh
       - enable-brew-services.sh
       - enable-hyprblue-groups.sh
 
