@@ -4,47 +4,72 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a BlueBuild repository for creating a custom Fedora Atomic image called "hyprblue". It builds on top of Wayblue's hyprland-nvidia-open image, which provides Hyprland with open-source NVIDIA drivers.
+Hyprblue is a custom Fedora bootc image with Hyprland desktop. Built using a raw Containerfile on top of `quay.io/fedora/fedora-bootc:43`.
 
 ## Build Commands
 
-Local builds require the BlueBuild CLI (pre-installed on BlueBuild images):
+```bash
+# Build container image
+just build
+
+# Build with no cache (clean rebuild)
+just build-clean
+
+# Validate container image
+just lint
+```
+
+## VM Testing (bcvk)
 
 ```bash
-# Generate Containerfile from recipe (preview build config)
-bluebuild generate recipes/recipe.yml
+# Run persistent VM (with host storage for updates)
+just run
 
-# Build image locally
-bluebuild build recipes/recipe.yml
+# SSH into running VM
+just ssh
 
-# Build and deploy to current system (exports tar.gz, rebases via rpm-ostree)
-bluebuild switch recipes/recipe.yml
+# Quick ephemeral boot test
+just test
+
+# Stop/start/remove VM
+just stop
+just start
+just rm
 ```
+
+**Update workflow**:
+1. Make changes and `just build` on host
+2. In VM: `sudo bootc upgrade`
+3. In VM: `sudo reboot`
 
 ## Architecture
 
-**Recipe-driven build system**: The `recipes/recipe.yml` file defines the image through ordered modules:
-
-1. **files** - Copies `files/system/*` into the image root
-2. **dnf** - Manages RPM packages and COPR repos
-3. **default-flatpaks** - Configures system/user flatpaks
-4. **signing** - Sets up image signing policy
-
 **Key paths**:
-- `recipes/recipe.yml` - Main image definition
+- `Containerfile` - Main image definition
 - `files/system/` - Files overlaid onto `/` (use `etc/` and `usr/` subdirectories)
-- `files/scripts/` - Custom build scripts (referenced via `script` module type)
-- `modules/` - Custom module definitions
+- `build_files/scripts/` - Build scripts (install-packages.sh, install-1password.sh, etc.)
+- `build_files/repos/` - Additional repo files for dnf
 
-**Base image**: `ghcr.io/wayblueorg/hyprland-nvidia-open:latest`
+**Base image**: `quay.io/fedora/fedora-bootc:43`
 
 **Published to**: `ghcr.io/jfernandez/hyprblue:latest`
 
-## Recipe Schema
+**Containerfile layer caching**: The Containerfile uses split build contexts:
+- `build-ctx` - Contains `build_files/` (scripts, repos)
+- `system-ctx` - Contains `files/system/` (config files)
 
-The recipe uses the BlueBuild v1 schema: `https://schema.blue-build.org/recipe-v1.json`
+This ensures changes to `files/system/` don't invalidate the package installation layers. Only `build_files/` changes trigger full rebuilds.
 
-Available module types: `files`, `dnf`, `rpm-ostree`, `default-flatpaks`, `script`, `signing`, and others documented at https://blue-build.org/reference/modules/
+## File Permissions
+
+**IMPORTANT**: Files in `files/system/` must have proper permissions:
+- Directories: `755` (rwxr-xr-x)
+- Files: `644` (rw-r--r--)
+- Executable scripts: `755` (rwxr-xr-x)
+
+Restrictive permissions (700/600) will cause boot failures because systemd and other services won't be able to read the config files.
+
+Fix permissions if needed: `chmod -R a+rX files/system/`
 
 ## Commit Guidelines
 

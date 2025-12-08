@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -ouex pipefail
 
+# Install dnf5 plugins (required for copr command)
+dnf5 -y install dnf5-plugins
+
 # Add external repositories
 cp /ctx/build_files/repos/*.repo /etc/yum.repos.d/
 
@@ -12,12 +15,8 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y --setopt=max_parallel_downloads=20 install \
     micro \
     starship \
-    ostree \
-    rpm-ostree \
     flatpak-builder \
-    podman \
     buildah \
-    skopeo \
     distrobox \
     docker-ce \
     docker-ce-cli \
@@ -33,21 +32,21 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     ncurses-devel \
     elfutils-libelf-devel \
     zlib-devel \
-    curl \
     fzf \
     git \
     ripgrep \
     zsh \
     stow \
     autojump-zsh \
-    gnupg2 \
-    openssl \
     neomutt \
     tailscale \
-    ublue-brew \
+    rust \
+    cargo \
+    openssl-devel \
     libvirt \
     virt-manager \
-    qemu-kvm
+    qemu-kvm \
+    ublue-brew
 
 # Disable COPRs
 dnf5 -y copr disable atim/starship
