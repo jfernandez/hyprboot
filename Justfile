@@ -1,8 +1,8 @@
 # =============================================================================
-# Hyprblue Development Justfile
+# Hyprboot Development Justfile
 # =============================================================================
 
-export image_name := env("IMAGE_NAME", "hyprblue")
+export image_name := env("IMAGE_NAME", "hyprboot")
 export default_tag := env("DEFAULT_TAG", "latest")
 export full_image := "localhost/" + image_name + ":" + default_tag
 

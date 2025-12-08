@@ -6,7 +6,7 @@ Before=sockets.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/hyprblue-groups
+ExecStart=/usr/bin/hyprboot-groups
 
 [Install]
 WantedBy=sysinit.target

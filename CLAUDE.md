@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Hyprblue is a custom Fedora bootc image with Hyprland desktop. Built using a raw Containerfile on top of `quay.io/fedora/fedora-bootc:43`.
+Hyprboot is a personal Fedora bootc image built on top of `ghcr.io/jfernandez/hyprland-bootc-nvidia-open`. It adds personal tools and configurations to the base Hyprland desktop.
 
 ## Build Commands
 
@@ -50,15 +50,9 @@ just rm
 - `build_files/scripts/` - Build scripts (install-packages.sh, install-1password.sh, etc.)
 - `build_files/repos/` - Additional repo files for dnf
 
-**Base image**: `quay.io/fedora/fedora-bootc:43`
+**Base image**: `ghcr.io/jfernandez/hyprland-bootc-nvidia-open:latest`
 
-**Published to**: `ghcr.io/jfernandez/hyprblue:latest`
-
-**Containerfile layer caching**: The Containerfile uses split build contexts:
-- `build-ctx` - Contains `build_files/` (scripts, repos)
-- `system-ctx` - Contains `files/system/` (config files)
-
-This ensures changes to `files/system/` don't invalidate the package installation layers. Only `build_files/` changes trigger full rebuilds.
+**Published to**: `ghcr.io/jfernandez/hyprboot:latest`
 
 ## File Permissions
 

@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '00 06 * * *'  # 06:00 UTC daily (after wayblue builds)
+    - cron: '00 07 * * *'  # 07:00 UTC daily (after hyprland-bootc builds)
   push:
     branches:
       - main
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_DESC: "Hyprland desktop on Fedora Atomic with NVIDIA support"
+  IMAGE_DESC: "Personal Hyprland desktop on Fedora bootc"
   IMAGE_KEYWORDS: "bootc,hyprland,nvidia,fedora,atomic"
   IMAGE_NAME: "${{ github.event.repository.name }}"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
@@ -124,4 +124,4 @@ jobs:
           done
         env:
           COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
