@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -ouex pipefail
 
-# Install dnf5 plugins (required for copr command)
-dnf5 -y install dnf5-plugins
-
 # Add external repositories
 cp /ctx/build_files/repos/*.repo /etc/yum.repos.d/
 
