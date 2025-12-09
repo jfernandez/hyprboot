@@ -4,6 +4,13 @@ name: Build disk images
 on:
   workflow_dispatch:
     inputs:
+      image:
+        description: "Image variant"
+        required: true
+        type: choice
+        options:
+          - hyprboot
+          - hyprboot-nvidia-open
       upload-to-s3:
         description: "Upload to S3"
         required: false
@@ -17,7 +24,7 @@ on:
           - arm64
 
 env:
-  IMAGE_NAME: ${{ github.event.repository.name }}
+  IMAGE_NAME: ${{ inputs.image }}
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
   DEFAULT_TAG: "latest"
   BIB_IMAGE: "ghcr.io/lorbuschris/bootc-image-builder:20250608"
@@ -82,6 +89,7 @@ jobs:
         if: inputs.upload-to-s3 != true && github.event_name != 'pull_request'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
+          name: ${{ env.IMAGE_NAME }}-${{ env.DISK_TYPE }}-${{ inputs.platform }}
           path: ${{ steps.build.outputs.output-directory }}
           if-no-files-found: error
           retention-days: 0

@@ -1,5 +1,5 @@
 ---
-name: Build container image
+name: Build container images
 on:
   pull_request:
     branches:
@@ -14,9 +14,6 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_DESC: "Personal Hyprland desktop on Fedora bootc"
-  IMAGE_KEYWORDS: "bootc,hyprland,nvidia,fedora,atomic"
-  IMAGE_NAME: "${{ github.event.repository.name }}"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
   DEFAULT_TAG: "latest"
 
@@ -26,8 +23,19 @@ concurrency:
 
 jobs:
   build_push:
-    name: Build and push image
+    name: Build ${{ matrix.image }}
     runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: hyprboot
+            base_image: ghcr.io/jfernandez/hyprland-bootc:latest
+            description: "Opinionated Hyprland desktop on Fedora bootc"
+          - image: hyprboot-nvidia-open
+            base_image: ghcr.io/jfernandez/hyprland-bootc-nvidia-open:latest
+            description: "Opinionated Hyprland desktop on Fedora bootc with NVIDIA open drivers"
 
     permissions:
       contents: read
@@ -47,9 +55,8 @@ jobs:
 
       - name: Prepare environment
         run: |
-          # Lowercase the image uri
           echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> ${GITHUB_ENV}
-          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
+          echo "IMAGE_NAME=${{ matrix.image }}" >> ${GITHUB_ENV}
 
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -71,8 +78,8 @@ jobs:
             type=ref,event=pr
           labels: |
             org.opencontainers.image.created=${{ steps.date.outputs.date }}
-            org.opencontainers.image.description=${{ env.IMAGE_DESC }}
-            org.opencontainers.image.title=${{ env.IMAGE_NAME }}
+            org.opencontainers.image.description=${{ matrix.description }}
+            org.opencontainers.image.title=${{ matrix.image }}
             org.opencontainers.image.version=${{ env.DEFAULT_TAG }}.{{date 'YYYYMMDD'}}
             containers.bootc=1
           sep-tags: " "
@@ -84,6 +91,10 @@ jobs:
         with:
           containerfiles: |
             ./Containerfile
+          build-args: |
+            BASE_IMAGE=${{ matrix.base_image }}
+            IMAGE_NAME=${{ matrix.image }}
+            IMAGE_DESC=${{ matrix.description }}
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}

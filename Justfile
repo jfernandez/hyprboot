@@ -14,7 +14,8 @@ default:
 # Container Image Build
 # =============================================================================
 
-# Build the container image
+# Build the container image (AMD/Intel)
+[group('Build')]
 build:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -30,11 +31,54 @@ build:
         --tag "{{full_image}}" \
         .
 
+# Build the NVIDIA variant
+[group('Build')]
+build-nvidia:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    BUILD_ARGS=()
+    if [[ -z "$(git status -s)" ]]; then
+        BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=$(git rev-parse --short HEAD)")
+    fi
+
+    podman build \
+        "${BUILD_ARGS[@]}" \
+        --build-arg BASE_IMAGE=ghcr.io/jfernandez/hyprland-bootc-nvidia-open:latest \
+        --build-arg IMAGE_NAME=hyprboot-nvidia-open \
+        --build-arg IMAGE_DESC="Opinionated Hyprland desktop on Fedora bootc with NVIDIA open drivers" \
+        --pull=missing \
+        --tag localhost/hyprboot-nvidia-open:{{default_tag}} \
+        .
+
+# Build all variants
+[group('Build')]
+build-all: build build-nvidia
+
 # Build with no cache (clean rebuild)
+[group('Build')]
 build-clean:
     #!/usr/bin/env bash
     set -euo pipefail
     podman build --no-cache --pull=always --tag "{{full_image}}" .
+
+# Build NVIDIA variant with no cache
+[group('Build')]
+build-clean-nvidia:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    podman build \
+        --no-cache \
+        --pull=always \
+        --build-arg BASE_IMAGE=ghcr.io/jfernandez/hyprland-bootc-nvidia-open:latest \
+        --build-arg IMAGE_NAME=hyprboot-nvidia-open \
+        --build-arg IMAGE_DESC="Opinionated Hyprland desktop on Fedora bootc with NVIDIA open drivers" \
+        --tag localhost/hyprboot-nvidia-open:{{default_tag}} \
+        .
+
+# Build all variants with no cache
+[group('Build')]
+build-clean-all: build-clean build-clean-nvidia
 
 # =============================================================================
 # VM Testing (via bcvk)

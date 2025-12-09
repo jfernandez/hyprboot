@@ -15,6 +15,15 @@
           }
         }
       ],
+      "ghcr.io/jfernandez/hyprboot-nvidia-open": [
+        {
+          "type": "sigstoreSigned",
+          "keyPath": "/etc/pki/containers/hyprboot.pub",
+          "signedIdentity": {
+            "type": "matchRepository"
+          }
+        }
+      ],
       "": [
         {
           "type": "insecureAcceptAnything"

@@ -1,10 +1,20 @@
 # =============================================================================
 # Hyprboot Container Image
 # =============================================================================
-# Personal Hyprland desktop built on hyprland-bootc.
+# Opinionated Hyprland desktop built on hyprland-bootc.
 #
-# Build: podman build -t hyprboot .
+# Build:
+#   podman build -t hyprboot .                          # AMD/Intel (default)
+#   podman build \
+#     --build-arg BASE_IMAGE=ghcr.io/jfernandez/hyprland-bootc-nvidia-open:latest \
+#     --build-arg IMAGE_NAME=hyprboot-nvidia-open \
+#     --build-arg IMAGE_DESC="Opinionated Hyprland desktop on Fedora bootc with NVIDIA open drivers" \
+#     -t hyprboot-nvidia-open .
 # =============================================================================
+
+ARG BASE_IMAGE=ghcr.io/jfernandez/hyprland-bootc:latest
+ARG IMAGE_NAME=hyprboot
+ARG IMAGE_DESC="Opinionated Hyprland desktop on Fedora bootc"
 
 FROM scratch AS build-ctx
 COPY build_files /build_files
@@ -12,7 +22,11 @@ COPY build_files /build_files
 FROM scratch AS system-ctx
 COPY files/system /system
 
-FROM ghcr.io/jfernandez/hyprland-bootc-nvidia-open:latest
+FROM ${BASE_IMAGE}
+
+# Re-declare ARGs after FROM (they reset after each FROM)
+ARG IMAGE_NAME
+ARG IMAGE_DESC
 
 # Development tools and CLI utilities
 RUN --mount=type=cache,dst=/var/cache/libdnf5,sharing=locked \
@@ -47,8 +61,8 @@ RUN rm -rf /var/log/* /var/cache/* && \
     rm -rf /var/lib/containers /var/lib/docker /var/lib/rpm-state /var/lib/swtpm-localca
 
 # Labels
-LABEL org.opencontainers.image.title="hyprboot"
-LABEL org.opencontainers.image.description="Personal Hyprland desktop on Fedora bootc"
+LABEL org.opencontainers.image.title=$IMAGE_NAME
+LABEL org.opencontainers.image.description=$IMAGE_DESC
 LABEL containers.bootc="1"
 LABEL ostree.bootable="1"
 
