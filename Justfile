@@ -146,6 +146,43 @@ build-raw: build
     bcvk to-disk --format raw --filesystem btrfs --disk-size 20G \
         {{full_image}} output/disk.raw
 
+# Test ISO in a VM
+[group('Disk')]
+test-iso:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    disk=$(mktemp --suffix=.qcow2)
+    qemu-img create -f qcow2 "$disk" 20G
+    qemu-system-x86_64 \
+        -enable-kvm \
+        -m 4G \
+        -smp 2 \
+        -cdrom output/bootiso/install.iso \
+        -drive file="$disk",format=qcow2,if=virtio \
+        -boot d \
+        -vga virtio \
+        -display gtk
+    rm -f "$disk"
+
+# Build anaconda installer ISO
+[group('Disk')]
+build-iso: build
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p output
+    # Copy image from user storage to root storage
+    podman image scp $(id -un)@localhost::{{full_image}} root@localhost::
+    sudo podman run --rm -it --privileged --pull=newer \
+        --security-opt label=type:unconfined_t \
+        -v ./output:/output \
+        -v ./disk_config/iso.toml:/config.toml:ro \
+        -v /var/lib/containers/storage:/var/lib/containers/storage \
+        quay.io/centos-bootc/bootc-image-builder:latest \
+        --type anaconda-iso \
+        --rootfs btrfs \
+        --use-librepo=True \
+        {{full_image}}
+
 # =============================================================================
 # Utility
 # =============================================================================
