@@ -7,22 +7,16 @@ set -ouex pipefail
 GID_ONEPASSWORD="${GID_ONEPASSWORD:-1500}"
 GID_ONEPASSWORDCLI="${GID_ONEPASSWORDCLI:-1600}"
 
-# Setup repo
-rpm --import https://downloads.1password.com/linux/keys/1password.asc
-cat > /etc/yum.repos.d/1password.repo <<'EOF'
-[1password]
-name=1Password Stable Channel
-baseurl=https://downloads.1password.com/linux/rpm/stable/$basearch
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://downloads.1password.com/linux/keys/1password.asc
-EOF
+# Download RPMs directly
+curl -fsSL -o /tmp/1password.rpm \
+    https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm
+curl -fsSL -o /tmp/1password-cli.rpm \
+    https://downloads.1password.com/linux/rpm/stable/x86_64/1password-cli-latest.x86_64.rpm
 
 # Install packages
 mkdir -p /var/opt
-dnf5 -y install 1password 1password-cli
-rm /etc/yum.repos.d/1password.repo
+dnf5 -y install /tmp/1password.rpm /tmp/1password-cli.rpm
+rm /tmp/1password.rpm /tmp/1password-cli.rpm
 
 # Relocate from /opt to /usr/lib (ostree-compatible)
 mv /opt/1Password /usr/lib/1Password
