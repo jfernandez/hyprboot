@@ -43,7 +43,14 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     libvirt \
     virt-manager \
     qemu-kvm \
-    ublue-brew
+    ublue-brew \
+    unzip \
+    wget \
+    golang \
+    ruby \
+    rubygems \
+    python3-pip \
+    just
 
 # Disable COPRs
 dnf5 -y copr disable atim/starship
