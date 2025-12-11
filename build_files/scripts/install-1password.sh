@@ -38,6 +38,7 @@ chmod g+s /usr/bin/op
 
 # Desktop integration
 install -m0644 /usr/lib/1Password/resources/1password.desktop /usr/share/applications/
+sed -i 's|/opt/1Password/1password|/usr/bin/1password|g' /usr/share/applications/1password.desktop
 cp -rf /usr/lib/1Password/resources/icons/* /usr/share/icons/
 gtk-update-icon-cache -f -t /usr/share/icons/hicolor/
 
