@@ -37,10 +37,7 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     autojump-zsh \
     neomutt \
     tailscale \
-    rust \
-    cargo \
-    clippy \
-    rustfmt \
+    rustup \
     openssl-devel \
     gtk4-devel \
     dbus-devel \
