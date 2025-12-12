@@ -40,6 +40,7 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     rust \
     cargo \
     openssl-devel \
+    gtk4-devel \
     libvirt \
     virt-manager \
     qemu-kvm \
