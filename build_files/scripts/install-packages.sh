@@ -51,7 +51,14 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     ruby \
     rubygems \
     python3-pip \
-    just
+    just \
+    rpm-build \
+    rpmdevtools \
+    fedora-packager \
+    mock \
+    rpmlint \
+    rust2rpm \
+    cargo-rpm-macros
 
 # Disable COPRs
 dnf5 -y copr disable atim/starship
