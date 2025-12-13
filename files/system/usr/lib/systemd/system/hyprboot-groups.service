@@ -1,5 +1,5 @@
 [Unit]
-Description=Add wheel members to docker and libvirt groups
+Description=Add wheel members to docker, libvirt, and mock groups
 DefaultDependencies=no
 After=local-fs.target
 Before=sockets.target
