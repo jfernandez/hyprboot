@@ -29,6 +29,8 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     ncurses-devel \
     elfutils-libelf-devel \
     zlib-devel \
+    clang \
+    libbpf-devel \
     fzf \
     git \
     ripgrep \
