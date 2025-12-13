@@ -1,0 +1,11 @@
+# Override base image to exclude libvirt tap devices (vnet*)
+# Without this, systemd-networkd steals taps from virbr0 bridge
+[Match]
+Type=ether
+Name=!vnet*
+
+[Network]
+DHCP=yes
+
+[DHCPv4]
+RouteMetric=100
