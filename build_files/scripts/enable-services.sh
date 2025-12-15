@@ -13,3 +13,6 @@ systemctl enable hyprboot-groups.service
 # Mask units that don't work on bootc
 # remount-fs fails because root is a composefs overlay, not the btrfs in fstab
 systemctl mask systemd-remount-fs.service
+
+# Disable automatic updates (manual: sudo bootc upgrade)
+systemctl mask bootc-fetch-apply-updates.timer
