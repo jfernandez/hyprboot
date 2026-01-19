@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Take a screenshot of a user-selected region.
+# Saves to ~/Pictures/Screenshots by default.
+
+OUTPUT_DIR="${HYPRBOOT_SCREENSHOT_DIR:-$HOME/Pictures/Screenshots}"
+
+# Create output directory if it doesn't exist
+mkdir -p "$OUTPUT_DIR"
+
+# Cancel any existing slurp selection
+pkill slurp && exit 0
+
+# Parse arguments
+CLIPBOARD_ONLY=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --clipboard|-c)
+      CLIPBOARD_ONLY=true
+      shift
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
+# Select region with slurp
+SELECTION=$(slurp 2>/dev/null)
+[ -z "$SELECTION" ] && exit 0
+
+if [[ "$CLIPBOARD_ONLY" == "true" ]]; then
+  # Direct to clipboard without editor
+  grim -g "$SELECTION" - | wl-copy
+else
+  # Open in satty for editing
+  grim -g "$SELECTION" - | \
+    satty --filename - \
+      --output-filename "$OUTPUT_DIR/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png" \
+      --early-exit \
+      --actions-on-enter save-to-clipboard \
+      --save-after-copy \
+      --copy-command 'wl-copy'
+fi

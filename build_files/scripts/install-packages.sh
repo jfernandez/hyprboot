@@ -7,6 +7,7 @@ cp /ctx/build_files/repos/*.repo /etc/yum.repos.d/
 # Enable COPRs
 dnf5 -y copr enable atim/starship
 dnf5 -y copr enable ublue-os/packages
+dnf5 -y copr enable solopasha/hyprland
 
 # Install packages
 dnf5 -y --setopt=max_parallel_downloads=20 install \
@@ -60,11 +61,16 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     mock \
     rpmlint \
     rust2rpm \
-    cargo-rpm-macros
+    cargo-rpm-macros \
+    grim \
+    slurp \
+    wl-clipboard \
+    satty
 
 # Disable COPRs
 dnf5 -y copr disable atim/starship
 dnf5 -y copr disable ublue-os/packages
+dnf5 -y copr disable solopasha/hyprland
 
 # Remove repo files (updates baked into image)
 rm -f /etc/yum.repos.d/docker-ce.repo \

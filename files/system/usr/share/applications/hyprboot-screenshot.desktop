@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Screenshot
+Comment=Take a screenshot of a selected region
+Exec=hyprboot-screenshot
+Icon=accessories-screenshot
+Terminal=false
+Type=Application
+Categories=Utility;Graphics;
+Keywords=screenshot;capture;screen;snip;
