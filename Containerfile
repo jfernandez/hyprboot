@@ -44,10 +44,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5,sharing=locked \
 RUN --mount=type=bind,from=build-ctx,source=/,target=/ctx \
     /ctx/build_files/scripts/install-neovim.sh
 
-# mdserve
-RUN --mount=type=bind,from=build-ctx,source=/,target=/ctx \
-    /ctx/build_files/scripts/install-mdserve.sh
-
 # Google Chrome
 RUN --mount=type=cache,dst=/var/cache/libdnf5,sharing=locked \
     --mount=type=cache,dst=/var/cache/dnf,sharing=locked \
