@@ -54,6 +54,7 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     unzip \
     wget \
     golang \
+    pam-devel \
     ruby \
     rubygems \
     python3-pip \
