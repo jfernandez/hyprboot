@@ -69,7 +69,8 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     grim \
     slurp \
     wl-clipboard \
-    satty
+    satty \
+    pipewire-alsa
 
 # Disable COPRs
 dnf5 -y copr disable atim/starship
