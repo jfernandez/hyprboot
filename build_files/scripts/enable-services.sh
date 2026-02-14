@@ -16,3 +16,6 @@ systemctl mask systemd-remount-fs.service
 
 # Disable automatic updates (manual: sudo bootc upgrade)
 systemctl mask bootc-fetch-apply-updates.timer
+
+# User services (--global enables for all users)
+systemctl --global enable voxtype.service

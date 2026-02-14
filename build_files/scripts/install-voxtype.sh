@@ -11,4 +11,7 @@ download_with_retry "$VOXTYPE_URL" /tmp/voxtype.rpm
 dnf5 install -y /tmp/voxtype.rpm
 rm /tmp/voxtype.rpm
 
+# Enable Vulkan GPU acceleration
+ln -sf /usr/lib/voxtype/voxtype-vulkan /usr/bin/voxtype
+
 voxtype --version
