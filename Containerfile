@@ -50,6 +50,12 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5,sharing=locked \
     --mount=type=bind,from=build-ctx,source=/,target=/ctx \
     /ctx/build_files/scripts/install-chrome.sh
 
+# Voxtype (voice-to-text)
+RUN --mount=type=cache,dst=/var/cache/libdnf5,sharing=locked \
+    --mount=type=cache,dst=/var/cache/dnf,sharing=locked \
+    --mount=type=bind,from=build-ctx,source=/,target=/ctx \
+    /ctx/build_files/scripts/install-voxtype.sh
+
 # System configuration files
 COPY --from=system-ctx /system /
 
