@@ -41,3 +41,7 @@ echo "g onepassword ${GID_ONEPASSWORD}" > /usr/lib/sysusers.d/onepassword.conf
 echo "g onepassword-cli ${GID_ONEPASSWORDCLI}" > /usr/lib/sysusers.d/onepassword-cli.conf
 rm -f /usr/lib/sysusers.d/30-rpmostree-pkg-group-onepassword.conf
 rm -f /usr/lib/sysusers.d/30-rpmostree-pkg-group-onepassword-cli.conf
+
+# Remove 1Password repo (installed from direct RPMs, not needed at runtime;
+# breaks bootc-image-builder ISO builds if left in place)
+rm -f /etc/yum.repos.d/1password.repo

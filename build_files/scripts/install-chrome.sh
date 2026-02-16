@@ -8,3 +8,6 @@ curl -fsSL -o /tmp/google-chrome.rpm \
 
 dnf5 install -y /tmp/google-chrome.rpm
 rm /tmp/google-chrome.rpm
+
+# Remove Google Chrome repo (installed from direct RPM, not needed at runtime)
+rm -f /etc/yum.repos.d/google-chrome.repo
