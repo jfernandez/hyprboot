@@ -173,6 +173,7 @@ build-iso: build
     # Copy image from user storage to root storage
     podman image scp $(id -un)@localhost::{{full_image}} root@localhost::
     sudo podman run --rm -it --privileged --pull=newer \
+        --network=host \
         --security-opt label=type:unconfined_t \
         -v ./output:/output \
         -v ./disk_config/iso.toml:/config.toml:ro \
@@ -192,6 +193,7 @@ build-iso-nvidia: build-nvidia
     # Copy image from user storage to root storage
     podman image scp $(id -un)@localhost::localhost/hyprboot-nvidia-open:{{default_tag}} root@localhost::
     sudo podman run --rm -it --privileged --pull=newer \
+        --network=host \
         --security-opt label=type:unconfined_t \
         -v ./output:/output \
         -v ./disk_config/iso.toml:/config.toml:ro \
@@ -201,7 +203,8 @@ build-iso-nvidia: build-nvidia
         --rootfs btrfs \
         --use-librepo=True \
         localhost/hyprboot-nvidia-open:{{default_tag}}
-    mv output/bootiso/install.iso output/bootiso/hyprboot-nvidia.iso
+    sudo mv output/bootiso/install.iso output/bootiso/hyprboot-nvidia.iso
+    sudo chown $(id -u):$(id -g) output/bootiso/hyprboot-nvidia.iso
 
 # =============================================================================
 # Utility
