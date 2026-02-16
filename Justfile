@@ -183,6 +183,26 @@ build-iso: build
         --use-librepo=True \
         {{full_image}}
 
+# Build anaconda installer ISO (NVIDIA variant)
+[group('Disk')]
+build-iso-nvidia: build-nvidia
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p output
+    # Copy image from user storage to root storage
+    podman image scp $(id -un)@localhost::localhost/hyprboot-nvidia-open:{{default_tag}} root@localhost::
+    sudo podman run --rm -it --privileged --pull=newer \
+        --security-opt label=type:unconfined_t \
+        -v ./output:/output \
+        -v ./disk_config/iso.toml:/config.toml:ro \
+        -v /var/lib/containers/storage:/var/lib/containers/storage \
+        quay.io/centos-bootc/bootc-image-builder:latest \
+        --type anaconda-iso \
+        --rootfs btrfs \
+        --use-librepo=True \
+        localhost/hyprboot-nvidia-open:{{default_tag}}
+    mv output/bootiso/install.iso output/bootiso/hyprboot-nvidia.iso
+
 # =============================================================================
 # Utility
 # =============================================================================
