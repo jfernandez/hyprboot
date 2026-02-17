@@ -72,7 +72,8 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     satty \
     pipewire-alsa \
     wtype \
-    mesa-vulkan-drivers
+    mesa-vulkan-drivers \
+    pinentry-gnome3
 
 # Disable COPRs
 dnf5 -y copr disable atim/starship
