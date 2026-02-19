@@ -8,8 +8,8 @@
 #
 # All three commands are idempotent and fast when nothing is missing.
 
-set -euo pipefail
+set -uo pipefail
 
-systemd-sysusers  # create users/groups from /usr/lib/sysusers.d/
-pwconv  || true   # sync /etc/shadow with /etc/passwd (best-effort)
-grpconv || true   # sync /etc/gshadow with /etc/group (best-effort)
+systemd-sysusers || true  # create users/groups from /usr/lib/sysusers.d/
+pwconv  || true            # sync /etc/shadow with /etc/passwd
+grpconv || true            # sync /etc/gshadow with /etc/group
