@@ -10,6 +10,11 @@
 
 set -uo pipefail
 
+# Fix stale gshadow entries from the old OS before sysusers runs,
+# otherwise systemd-sysusers fails on groups already in gshadow.
+grpconv || true
+pwconv  || true
+
 systemd-sysusers || true  # create users/groups from /usr/lib/sysusers.d/
-pwconv  || true            # sync /etc/shadow with /etc/passwd
-grpconv || true            # sync /etc/gshadow with /etc/group
+pwconv  || true            # sync any new shadow entries
+grpconv || true            # sync any new gshadow entries
