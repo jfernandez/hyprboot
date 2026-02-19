@@ -73,7 +73,9 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     pipewire-alsa \
     wtype \
     mesa-vulkan-drivers \
-    pinentry-qt
+    pinentry-qt \
+    iwlwifi-mvm-firmware \
+    iwlwifi-mld-firmware
 
 # Disable COPRs
 dnf5 -y copr disable atim/starship
