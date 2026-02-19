@@ -7,6 +7,7 @@ set -ouex pipefail
 systemctl enable tailscaled.service
 
 # System setup
+systemctl enable hyprboot-sysusers.service
 systemctl enable brew-setup.service
 systemctl enable hyprboot-groups.service
 

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Ensure system users/groups exist in /etc/passwd and /etc/shadow.
+#
+# After "bootc switch", /etc/passwd is preserved from the old OS and
+# systemd-sysusers may be skipped (ConditionNeedsUpdate=/etc).
+# This leaves the image's system users (sddm, rtkit, etc.) unresolved,
+# breaking services like the display manager.
+#
+# All three commands are idempotent and fast when nothing is missing.
+
+set -euo pipefail
+
+systemd-sysusers  # create users/groups from /usr/lib/sysusers.d/
+pwconv  || true   # sync /etc/shadow with /etc/passwd (best-effort)
+grpconv || true   # sync /etc/gshadow with /etc/group (best-effort)

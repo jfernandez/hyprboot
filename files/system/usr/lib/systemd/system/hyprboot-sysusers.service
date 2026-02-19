@@ -1,0 +1,13 @@
+[Unit]
+Description=Ensure system users exist after bootc switch
+DefaultDependencies=no
+After=local-fs.target systemd-sysusers.service
+Before=systemd-tmpfiles-setup.service systemd-tmpfiles-setup-dev.service
+Before=sockets.target hyprboot-groups.service display-manager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/hyprboot-sysusers
+
+[Install]
+WantedBy=sysinit.target
