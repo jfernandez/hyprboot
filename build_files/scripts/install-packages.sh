@@ -72,7 +72,6 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     wl-clipboard \
     satty \
     pipewire-alsa \
-    alsa-sof-firmware \
     wtype \
     mesa-vulkan-drivers \
     pinentry-qt \
