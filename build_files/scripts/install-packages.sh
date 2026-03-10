@@ -46,6 +46,10 @@ dnf5 -y --setopt=max_parallel_downloads=20 install \
     rustfmt \
     openssl-devel \
     gtk4-devel \
+    gtk4-layer-shell-devel \
+    libadwaita-devel \
+    zig \
+    gettext \
     dbus-devel \
     libvirt \
     virt-manager \
